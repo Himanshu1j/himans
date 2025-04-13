@@ -6,7 +6,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $pass = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+   
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
@@ -14,14 +15,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['user'] = $user['name'];
         header("Location: dashboard.php");
     } else {
-        echo "Invalid credentials.";
+        $emailErr = "Invalid email or password.";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Shree Ram Login</title>
+    <title>Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -75,14 +77,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
 <div class="login-container">
-    <h2>Login </h2>
-    <form method="post">
+    <h2>Login</h2>
+    <form method="post" action="login.php">
         <input type="email" name="email" placeholder="Email" required><br>
         <input type="password" name="password" placeholder="Password" required><br>
         <button type="submit">Login</button>
+    </form>
+    <form action="registration.php" method="get">
+        <a href="registration.php"><button type="button">Sign Up</button></a>
     </form>
 </div>
 
 </body>
 </html>
-
